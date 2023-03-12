@@ -12,7 +12,10 @@ const port = 3000;
 //Express Middleware
 app.use(express.json());
 //Iniciar el middleware para cors y habilitar cualquier origen de peticiones
-const whiteList = ['http://localhost:8080', 'https://myapp.co'];
+const whiteList = [
+  'http://localhost:8080',
+  'https://store-express.onrender.com',
+];
 const options = {
   origin: (origin, callback) => {
     if (whiteList.includes(origin) || !origin) callback(null, true);
