@@ -4,7 +4,7 @@ const boom = require('@hapi/boom');
 class ProductsService {
   constructor() {
     this.products = [];
-    //this.generate();
+    this.generate();
   }
 
   generate() {
@@ -33,7 +33,7 @@ class ProductsService {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         if (this.products.length !== 0) resolve(this.products);
-        reject('Product does not exist');
+        reject(boom.notFound('Product not found'));
       }, 2000);
     });
   }
