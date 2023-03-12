@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Rest con Express</title>
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+</head>
+<body>
+    <header>
+        <a href="../../../index.html">Anotaciones</a>
+        <section>
+            <a href="./ClassNotes2.html">Hoja 2</a>
+        </section>
+    </header>
+    <main>
+        <p>
+    <h1>
+        Curso de Backend con NodeJs: API REST con express
+    </h1>
+    <p><a href="https://platzi.com/clases/backend-nodejs/">Link del curso </a></p>
+    <p>
+        <a href="https://luchomorla.github.io/anotaciones/cursos/backend%20con%20node/API%20REST%20con%20express/apiRestExpress.html">link del repositorio</a>
+    </p>
+    <h2>
+        Configuracion del Entorno
+    </h2>
+    <p>
+        comenzamos con la configuracion del entrono <strong>creando la carpeta del projecto.</strong> desde la consola y ejecutamos los siguientes comandos:<br>
+        <ol>
+            <li>
+            <p>
+                Abrimos visual studio Code
+            </p>
+            <p class="comando"> code .</p>
+            </li>
+            <li>
+                <p>
+                    instalamos npm por defecto(por esta vez) usando -y
+                </p>
+                <p class="comando"> npm init -y</p>
+            </li>
+        </ol>
+        Luego continuamos dentro de visual estudio code creando las carpetas: .gitignore, .editorconfig, .eslintrc.json(para crear las reglas de buenas practicas), nuestro archivo de configuracion index.js y finalmente los configuramos.
+        <ul>
+            <li>
+        <h3>
+            gitignore.io
+        </h3>
+        <ol>
+            <li>
+        <p>
+            comenzamos con la configuracion de este archivo, nos es recomendado entrar a <a href="https://www.toptal.com/developers/gitignore">gitignore.io</a>
+            en la barra escogemos los entornos y los sistemas operativos para evitar traquear ciertos archivos del sistema, en este caso escribimos: Node Windows Mac Linux. ->(click en) crear
+        </p>
+    </li>
+    <li>
+        <p>
+            copiamos y pegamos en nuestro archivo la configuracion que nos da la pagina.
+        </p>
+    </li>
+    </ol>
+    </li>
+    <li>
+        <h3>
+            .editorconfig
+        </h3>
+        <ol>
+            Nos es recomendado para que todos los editores tengan una misma configuracion del editor
+            <li>
+                <p>
+                    instalamos un plugin para que nos funcione este archivo, el plugin de visual studio code es: <strong>EditorConfig for VS Code</strong>
+                </p>
+            </li>
+            <li>
+                <p>
+                    Copiamos y pegamos la configuracion que nos dio el profesor:
+                </p>
+                <p class="code">
+                    # Editor configuration, see https://editorconfig.org
+root = true
+
+[*]
+charset = utf-8
+indent_style = space
+indent_size = 2
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.js]
+quote_type = single
+
+[*.md]
+max_line_length = off
+trim_trailing_whitespace = false
+                </p>
+            </li>
+            </ol>
+<li>
+                <h3>
+                    .eslintrc.json
+                </h3>
+                <p>
+                    Copiamos y pegamos la siguiente configuracion para nuestro eslinter y buenas practicas:
+                </p>
+                <p class="code">
+                    {
+                        "parserOptions": {
+                          "ecmaVersion": 2018
+                        },
+                        "extends": [
+                          "eslint:recommended",
+                          "prettier"
+                        ],
+                        "env": {
+                          "es6": true,
+                          "node": true,
+                          "jest": true
+                        },
+                        "rules": {
+                          "no-console": "warn"
+                        }
+                      }
+                </p>
+                </li>
+                <li>
+                <h3>
+                Package.json
+            </h3>
+            <ol>                <p>
+                Vamos a levantar un enotrno de  desarrollo y produccion.
+                Para esto escribimos dentro de la configuracion de los comandos de scripts:
+                </p>
+                <li>
+                    empezamos con el entorno de desarrollo:
+                    <p class="code">
+                        "dev": "nodemon index.js"
+                    </p>
+                </li>
+                <li>
+                    el entorno de produccion:
+                    <p>
+                        escribimos dentro de los comandos de scripts:
+                    </p>
+                    <p class="code">
+                        "start": "node index.js"
+                    </p>
+                </li>
+                <li>
+                   correr linter:
+                    <p>
+                        escribimos dentro de los comandos de scripts:
+                    </p>
+                    <p class="code">
+                        "lint": "eslint"
+                    </p>
+                </li>
+            </ol>
+        </li>
+        </ol>
+        </li>
+    </ul>
+    <strong>
+        Finalmente para que todo esto funcione tenemos que instalar nuestras dependencias de desarrollo, lo hacemos ejecutando en la consola el siguiente comando:
+        <p class="comando">
+            npm i nodemon eslint eslint-config-prettier eslint-plugin-prettier prettier -D
+        </p>
+        </strong>
+        finalmente podemos probar que esten listas nuestras dependencias ejecutando los comandos:
+        <p class="comando">
+            npm run dev
+        </p> <p class="comando">
+            npm run start
+        </p>
+    </p>
+    <hr>
+    <p>
+        Instalamos la extension de google chrome json viewer para poder leer de una forma más amigable las paginas que vienen en formato json
+    </p>
+    <hr>
+    <h2>¿Que son las REST API?</h2>
+    <p>
+        Es una conveccion que se refiere a servicios web por protocolo HTTP
+    </p>
+    <p>
+        METODOS:
+    </p>
+    <ul>
+        <li>
+            Get: obtener.<br>
+            normalmente se usa para obtener una informacion o solicitar una informacion, por ejemplo los productos que esten en una base de datos.
+        </li>
+        <li>
+            Put: Modificar/Actualizar. <br>
+            Normalmente trabaja sobre modificaciones
+        </li>
+        <li>
+            Patch: Modifivar/Actualizar
+        </li>
+        <li>
+            Post: Crear <br>
+            Post es para hacer la creacion
+        </li>
+        <li>
+            Delete: Eliminar
+        </li>
+    </ul>
+    <h4>
+        Patch
+    </h4>
+    <p>
+        Patch
+El método de solicitud HTTP PATCH aplica modificaciones parciales a un recurso. </p><p>
+
+PATCH es algo análogo al concepto de “actualización” que se encuentra en CRUD, Una solicitud se considera un conjunto de instrucciones sobre cómo modificar un recurso. Contrasta esto con PUT; que es una representación completa de un recurso.</p><p>PATCH
+
+Mo es necesariamente idempotente, aunque puede serlo. Contrasta esto con PUT; que siempre es idempotente.</p><p>
+
+La palabra “idempotente” significa que cualquier número de solicitudes repetidas e idénticas dejará el recurso en el mismo estado.</p><p>
+
+Por ejemplo, si un campo de contador de incremento automático es una parte integral del recurso, entonces un PUT lo sobrescribirá naturalmente (ya que sobrescribe todo), pero no necesariamente para .PATCH
+
+PATCH (como POST) puede tener efectos secundarios sobre otros recursos.</p><p>
+
+PATCH - HTTP | MDN
+    </p>
+    <img style="width: 350px" src="https://i.pinimg.com/originals/2b/95/0c/2b950cd6415ec385bb64bf0156f486f7.jpg" alt="Tabla de como funcionan los metodos y como hirian en los entrypoints y endpoints">
+    <p>
+        Recordando como funciona los metodos, la convencion de REST API nos dice que por cada entidad vamos a tener una ruta o endpoint con el nombre de la entidad y luego nosotros podriamos tener tambien un id que es opcional, pero deberiamos tener un identificador unico para los productos en este caso de uso, no importa si es una base de datos relacional o no relacional.
+        <p>Get: se puede hacer un Get por ids y obtener tabla de lista de productos</p>
+    <p>PUT: se lo utiliza el REPLACE individualmente por productos, esto quiere decir que es aconsejable modificar un producto a la vez, si podemos hacer modificaciones en masa pero no es buena practica</p>
+    <p>PATCH: funciona de la misma manera pero puedo hacer modificaciones más detalladas</p>
+    <p>POST: no aplica ID, por que nos sirve para crear y no se a creado el id aún</p>
+    <p>DELETE: se puede hacer en masa pero no es aconsejable, se utiliza para borrar</p>
+    </p>
+    <hr>
+    <h2>Getters and setters?
+    GET </h2>
+    <p>Vamos a ver primero de las convenciones</p>
+    <img src="https://i.pinimg.com/originals/53/87/24/53872406556829dea953862a1a3767cf.jpg" alt="">
+    <p>Que son los muy nombrados endpoints? <br> Para los que como yo, no sabíamos que es endpoints la palabra que tanto utiliza el profe: <br>
+
+        Los endpoints son las URLs de un API o un backend que responden a una petición. Los mismos entrypoints tienen que calzar con un endpoint para existir. Algo debe responder para que se renderice un sitio con sentido para el visitante.</p>
+    <p>/:id  -> los dos putos significan o indican que lo que se va a recibir es un parametro <br>
+     puedo definir uno de esos parametros id así(aunque utilizare la convencion ecmascript6) -> const id = req.params.id; cabe recalcar que debe ir talcual como defino en el slash</p>
+     <img style=" width: 350px" src="https://i.pinimg.com/originals/91/2c/e8/912ce83b7179d7345b685ed37856f2c0.jpg" alt="primera funcion definiendo el id">
+    =>
+     <img style=" width: 350px" src="https://i.pinimg.com/originals/88/59/a7/8859a76508f257267c9d5dd191de7d30.jpg" alt="Resultado al ingresar un endpoind poniendo como respuesta en el endpoint un saludo a pinteREST-API">
+    <br>
+    <img src="https://i.pinimg.com/originals/26/0d/aa/260daa96bcd80a83139d44d184a72b1f.jpg" alt="">
+    <hr>
+    <h2>
+       GET: Query Params(Parametros Query)
+    </h2>
+    <p><img style="width:500px" src="https://i.pinimg.com/originals/d3/1c/54/d31c540819bdc61e055473c39db68b33.jpg" alt=""></p>
+    <p>Los Parametros Tipo Query que normalmente son opcionales podemos hacer cosas como por ejemplo:</p>
+    <ol>
+        <li>
+            paginar:
+    <p> en la pagina numero 1 tenemos tales productos y cierta cantidad</p>
+        </li>
+        <li>
+            Paginacion Limit&Offset:
+            <p>
+            Otra estrategia de Paginacion
+            </p>
+        </li>
+        <li>
+            Filtrar:
+            <p>por ejemplo quiero todos los productos que se vendan en el territorio de los Estados Unidos</p>
+        </li>
+        <li>
+            Doble Filtro:
+            <p> Quiero todos los productos que se vendan en tal region pero de esta marca en especifico</p>
+        </li>
+    </ol>
+    <p>
+        <strong>pero.. ¿COMO recogemos paramtros tipo Query?</strong>
+    </p>
+    ? -> usamos al momento de recoger parametros tipo Query acompañados de su nombre y su definicion
+    <img src="https://i.pinimg.com/originals/ab/b2/ad/abb2ad78d3975a7db6d90d26d3360378.jpg" alt="ejemplo de como recogemos parametros tipo Query">
+    <hr>
+    <h3>Poblar con Data FAke</h3>
+    <p>Vamos a poblar de informacion más consisa para nuestros productos, vamos a instalar una libreria para generar data fake</p>
+    <p>Vamos a la consola y vamos a ejecutar el siguiente comando para instalar Faker:</p>
+    <ol>
+        <li>
+            <p class="comando">
+                npm i faker
+            </p>
+        </li>
+        <li>
+            <p>Luego importamos la libreria escribiendo el codigo en el archivo index.js</p>
+            <p class="code">
+                const faker = require('faker');
+            </p>
+        </li>
+        <li>
+            <p>Luego en el codigo creamos un array de productos y un for para que se cree de forma automatica y dinamica los productos, con las instrucciones para generar nombre aleatorio etc.</p>
+            <img src="https://i.pinimg.com/originals/79/51/73/795173a53ed340e8aad81247e1ab29c6.jpg" alt="poblando catalogo con datos fake utilizando faker en un servidor con node">
+        </li>
+        <li>
+            <p>
+                Ahora vamos a agregarle un limite, además vamos a capturar los parametros con un Query llamado size, en caso de no enviarle tamaño que el limite sea de 10 productos, agregando el siguiente codigo:.
+            </p>
+            <p class="code">
+                const { size } = req.query; <br>
+                const limit = size || 10; <br>
+                for (let index = 0; index < limit; index++)...
+            </p>
+        </li>
+    </ol>
+    <p>
+        <h5>Errores:</h5>
+        <p>
+            Hay veces que creamos rutas o routings o url especificas en conjunto de rutas dinamicas, hay veces que al ingresar a una ruta especifica me devuelve como una ruta dinamica, ese es un error muy común y la unica forma de solucionarlo es escribiendo primero las rutas especificas y despues las rutas dinámicas.
+            <img src="https://i.pinimg.com/564x/89/f2/30/89f230aa89ea6575f7dd4d002a38d258.jpg " alt="hay que poner primero las direcciones especificas y luego las dinamicas">
+            <p>hay que poner primero las direcciones especificas y luego las dinamicas</p>
+        </p>
+    </p>
+    <hr>
+    <h2>Single Responsability Principle(Separacion de responsabilidades con expressrouter)</h2>
+    <p>
+        <strong>El principio de una sola responsabilidad</strong> se trata de que cada artefacto, cada pieza de codigo debe tener una sola responsabilidad.
+    </p>
+    <p>
+        El principio de una sola responsabilidad se puede aplicar para <strong>clases, archivos y metodos.</strong>.EJM:
+    </p>
+    <p>
+        Un metodo llamado sumar solo deberia sumar, si se quiere hacer otras cosas como restar solo deberian restar.
+    </p>
+    <p>
+        Esto se ve facil en los metodos, pero este principio es algo que escala también a los archivos, por ejemplo para el routing deberia dividirse los endpoints por dominio especifico por cada archivo y tener un solo archivo que se encargue de definir todas las rutas de cada uno de un endpint en especifico, separando las responsabilidades. Por Ejemplo:
+    </p>
+    <p>
+        /products -> tiene todo el funcionamiento de los productos.
+        /categorias -> tiene todo el routing de las categorias.
+    </p>
+    <h3>
+        ¿Como se lo ejecuta en NodeJS?
+    </h3>
+    <ol>
+        <li>
+            <p>
+                Creamos una carpeta especifica para las rutas.
+            </p>
+            <p>
+                En el home de nuestro proyecto desde la consola podemos ejecutar el comando mkdir Routes y luego creamos el archivo index.js en esa carpeta
+            </p>
+        </li>
+        <li>
+            <p>
+                Vamos a empezar por crear la carpeta de productos:
+            </p>
+            <p>
+                Podemos llamarlo de las formas o normas productos.js, productosRouter.js o productos.router.js y desde la consola podemos ejecutar el comando touch "nombre".
+                Es importante que te decidas por una sola norma al momento de llamar tus archivos.
+            </p>
+        </li>
+        <li>
+            <p>
+                Como en nuestro proyecto habíamos estado trabajando de forma incorrecta, vamos a empezar a hacerlo de la forma correcta, comenzando por cortar y pegar todas las funciones referentes
+                a productos. Y de igual manera con todos las otras funciones de las otras entidades o rutas, como el de usuarios, categorias, etc.
+            </p>
+        </li>
+        <li>
+            <p>
+                ya pegadas las funciones, llamamos a las dependecias y ademas creamos una nueva constante que acceda el metodo router de express.
+            </p>
+            <img src="https://i.pinimg.com/564x/17/a6/d1/17a6d12a7cccb1104f80cf0c5471d251.jpg" alt="">
+        </li>
+        <li>
+            <p>
+                Ahora eliminamos de las rutas de los productos el endpoint productos, dejando solo las rutas especificas o las dinamicas.
+            </p>
+            <p>
+                Ademas tambien reemplazamos app por router.
+            </p>
+        </li>
+        <li>
+            Finalmente dejamos al final a porductos como un modulo exportable con el codigo:
+            <p class="code">
+                module.exports = router;
+            </p>
+        </li>
+        <li>
+            Ahora necesitamos configurar las rutas, dentro de la carpeta routes creamos un nuevo archivo index.js para que cumpla esta funcion.
+        </li>
+        <li>
+            <p> importamos productosRouter y establecemos el endpoint y especificamos la ruta, finalizando por exportar el la funcion que creamos para establecer el endpoint, la vamos a llamar routerApi.
+          </p>  <img src="https://i.pinimg.com/originals/73/8f/21/738f210a71c6f148a4f5d1bdf2d82f7a.jpg" alt="">
+          <p>
+              Y lo mismo debemos hacer con el resto de archivos, entidades o endpoints, todos iran dentro de la funcion routerApi
+          </p>
+        </li>
+        <li>
+            Ahora configuramos el archivo index.js del home de nuestro proyecto.
+            <ol>
+                <li>
+                    importamos el archivo index.js de la carpeta routes llamada romo routerApi, en este caso no es necesario que especifiquemos el archivo index.js por que ya busca por defecto a este archivo.
+                </li>
+                <li>
+                    finalmente llamamos  a la funcion routerApi, enviandole como parametro a express
+                    <p class="code"> routerApi(app);</p>
+                </li>
+            </ol>
+            <li>
+                Listo termiamos de modularizar nuestra aplicacion(Aplicamos la programacion orientada a objetos)
+                <p><img src="https://i.pinimg.com/564x/6b/cf/f4/6bcff45ef082a352dc9f3f41f8e4d413.jpg" alt=""></p>
+            </li>
+        </li>
+    </ol>
+    <p>
+        <hr>
+    <div>
+        <h2>Instalacion de postman</h2>
+        <p>Para poder probar nuestra API de forma más productiva vamos a tener que usar algún cliente de APIs que nos permita hacer las pruebas de funcionamiento de lo que estás construyendo, los dos clientes más famosos son Insomnia y Postman y vas a necesitar de alguno de ellos para ir probando cada característica que vamos a ir construyendo en nuestro servicio de Platzi Store.</p>
+        <p>Insomnia
+            Como cliente para probar APIs tiene grandes características, destaca principalmente por una interfaz limpia y sencilla, pero a la vez potente, en donde puede configurar ambientes, exportar e importar, gran soporte con GraphQL, etc. Insomnia será el que vamos a usar en este curso 🙂</p>
+            <p>Instalación
+                La instalación es sencilla, solo tienes que ingresar a <a href="https://insomnia.rest/download"> https://insomnia.rest/download </a> y descargar el instalador. Una vez esté descargado lo ejecutas y sigues los pasos de la instalación; en caso de Windows descarga un archivo .exe, en caso de Mac descarga un .dmg, y finalmente, en caso de Ubuntu descargas el .deb.</p>
+    </div></p>
+    <hr>
+    <div>
+        <h3>Manejo de versionados:</h3>
+        <p>
+            <img src="https://i.pinimg.com/564x/25/72/14/257214668369af1fa8d1c1ac9b193826.jpg" alt="">
+        </p>
+    </div>
+    <hr>
+    <div>
+        <h2>
+            necesitamos un cliente para hacer un post, vamos a usar Insomnia
+        </h2>
+        <ol>
+            <li>
+                Abrimos insomnia, hacemos click derecho y seleccionamos New Request(empezamos creando un request collection antes).
+            </li>
+            <li>
+                le ponemos en este caso el nombre de Get Productos.
+            </li>
+            <li>
+                en la barra insertamos nuestra direccion URL en la que vamos a trabajar, y le damos click en send.
+                <p>
+                    <img src="https://i.pinimg.com/564x/60/54/b9/6054b9e42ba41098cb47db02aab05a59.jpg" alt="">
+                </p>
+            </li>
+            <li>
+                vamos de nuevo a crear un nuevo request pero vamos a utilizar un nuevo metodo. en este caso Post, lo llamaremos Create product.
+            </li>
+            <li>
+                Vamos al mismo EndPoint, le decimos que queremos enviar en formato JSON. y creamos el cuerpo:
+                <p><img src="https://i.pinimg.com/originals/d6/ef/2f/d6ef2fb942106e0e4f5a44eba3f17ca4.jpg" alt=""></p>
+                Nos sale un error 404, pero ya lo esperabamos por que no hemos creado el metodo que atienda el metodo post, dentro de los metodos de producto.
+            </li>
+            <li>
+                Creamos el metodo post:
+                <p><img src="https://i.pinimg.com/originals/de/80/95/de8095697d964ea5fae7ead6dbefa48e.jpg" alt=""></p>
+                y lo volvemos a probar:
+                <p>
+                    <img src="https://i.pinimg.com/originals/7e/4e/7f/7e4e7fd097f4f7344e987bc147bc0373.jpg" alt="">
+                </p>
+                pero nos lanza un error 200, y no nos lanza el body o el atributo data, por que nos falta implementar un Middleware.
+                <p>"El término middleware se refiere a un sistema de software que ofrece servicios y funciones comunes para las aplicaciones. En general, el middleware se encarga de las tareas de gestión de datos, servicios de aplicaciones, mensajería, autenticación y gestión de API.                    ⠀⠀⠀
+                    Ayuda a los desarrolladores a diseñar aplicaciones con mayor eficiencia. Además, actúa como hilo conductor entre las aplicaciones, los datos y los usuarios.</p>
+                    <p>fuente: https://www.redhat.com/es/topics/middleware/what-is-middleware"</p></p>
+            </li>
+            <li>
+                Implementamos el middleware nativo que tiene express. con el codigo en el index.js del proyecto.
+                <p class="code">app.use(express.json());</p>
+                <img src="https://i.pinimg.com/originals/cb/cd/8a/cbcd8a440bd05269542615cce43d0cd2.jpg" alt=""><br>
+                probamos y...
+                <p><img src="https://i.pinimg.com/originals/8f/41/d1/8f41d1a50343f02656e31b449450dd17.jpg" alt=""></p>
+                Perfecto!!! nos llego la informacion
+            </li>
+        </ol>
+        </div>
+        <hr>
+        <div>
+            <h2>PUT, PATCH Y DELETE</h2>
+            para usar estos metodos necesitamos un id
+            <p><strong>PUT: </strong>tenemos para PUT en el rato de usarlo y actualizar la informamcion de nuestros "productos" llenar todos los atributos de este producto.</p>
+            <p><img src="https://i.pinimg.com/originals/4c/66/d4/4c66d4dac06c874f2313442ed3309fd4.jpg" alt=""></p>
+            <p><strong>PATCH: </strong>Me permite hacer una modificacion parcial del producto, esto quiere decir que puedo actualizar informacion de los atributos que yp quiera cambiar por ejemplo solo el nombre, o solo el precio.</p>
+            <p><img src="https://i.pinimg.com/originals/d1/ca/08/d1ca08556528809373b25959cf467288.jpg" alt="añadiendo metodo de patch para actualizar informacion total o parcial de cada producto"></p>
+            añadiendo metodo de patch para actualizar informacion total o parcial de cada producto, ahora lo probaremos en nuestro cliente o insonmia:
+            <p><img src="https://i.pinimg.com/originals/a2/f1/52/a2f152ad3dc23f1931d33eea5283fa59.jpg" alt=""></p>
+            <p><strong>DELETE: </strong> En este caso se lo implemetaria de igual manera, con la diferencia que no necesitariamos el body, solo un identificador que identifique al producto y lo elimine.</p>
+            <img src="https://i.pinimg.com/originals/d7/41/21/d7412149255e368f24e7fa4eb5b58a60.jpg" alt="">
+        </div>
+        <hr>
+        <div>
+            <h2>Status Code</h2>
+            siguiendo la convencion que nos propone REST,  es manegar un buen Status Code. <strong>Status Code</strong> es un estandar que nos permite saber que paso con la solicitud, siendo el más común el 404 NOT FOUND, cuando encontramos un recurso que el servidor no pudo encontrar o el más aterrador o desastrozo que es un error 500 donde el servidor por algún lado se rompio.
+            <br><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP">Pagina de mozilla sobre http</a><br>
+            <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status">Pagina sobre http response Status Code</a><br>
+            <a href="https://http.cat/">Ejemplificaciones divertidas con gatos </a>
+            <h3>¿Como implementar el status code?</h3>
+            <p>en el caso de Post lo implementamos y probamos así:</p>
+            <img src="https://i.pinimg.com/originals/2d/7f/e6/2d7fe6d8c6b80d09b6f3e284163799bd.jpg" alt="">
+            <p>En el caso de GET:</p>
+            <img src="https://i.pinimg.com/originals/8a/34/38/8a343886753e1c4f6fde2cb2265894c2.jpg" alt="">
+            <p>en el caso que get sea un 404</p>
+            <img src="https://i.pinimg.com/originals/84/a0/7f/84a07ff57f50564b1a08744dab47f763.jpg" alt="">
+        </div>
+        <hr>
+    </p>
+    <div>
+        <a href="./apiRestExpress2.html">Segunda Parte del Curso => Servicios, Middlewares y deployment</a>
+    </div>
+</p>
+</main>
+</body>
+</html>

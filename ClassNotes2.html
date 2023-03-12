@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Rest con Express</title>
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+</head>
+<body>
+    <header>
+        <a href="../../../index.html">Anotaciones</a>
+        <section>
+            <a href="./ClassNotes.html">Hoja 1</a>
+        </section>
+    </header>
+     <main>
+    <section>
+        <h1>
+            Curso de Backend con NodeJs: API REST con express
+        </h1>
+        <p><a href="https://platzi.com/clases/backend-nodejs/">Link del curso </a></p>
+            <a href="https://luchomorla.github.io/anotaciones/cursos/backend%20con%20node/API%20REST%20con%20express/apiRestExpress.html">link del repositorio</a>
+    </section>
+    <section>
+        <div>
+            <h2>
+                Servicios
+            </h2>
+            <p>
+               En los servicios es donde empezamos a encapsular toda la logica del negocio, o Aplicacion.
+            </p>
+            <picture>
+                <img src="https://i.pinimg.com/originals/05/a1/ac/05a1ac7ea0efd8d885ff9a0beb827e8b.jpg" alt="the clean architecture">
+                <p><strong>The Clean architecture</strong> es una arquitectura definida por capas:</p>
+                <ol>
+                    <li>
+                        <p><strong>Entidades: </strong>Es donde encontramos las entidades base de nuestra arquitectura, como entidad de productos, categorias, usuarios.</p>
+                    </li>
+                    <li>
+                        <p><strong>Casos de Uso: </strong>Es donde tenemos todo lo relacionado a la logica de negocio. es donde se encuentran los <strong>Servicios.</strong></p>
+                    </li>
+                    <li><p><strong>Controladores: </strong>Estos son los que brindan acceso, es donde encontramos a todo el <strong>Routing</strong></p></li>
+                </ol>
+                <img src="https://i.pinimg.com/originals/ec/82/70/ec82705945ce7e5763e5eb0b5ec5e2c0.jpg" alt="">
+                <p>Los controladores donde encontramos el routing y los middlewares, luego => tenemos a los servicios, donde se encuentra toda la logica de negocio y son los que usan a las librerias, => las librerias se encargan de conectarse a esta capa de entidades y a otras fuentes de datos como API externas o otras bases de datos</p>
+            </picture>
+            <h3>Separando la logica del negocio, implementando los Servicios</h3>
+            <div>
+                <ol>
+                    <li>Empezaremos por crear carpeta para los servicios</li>
+                    <li>Creamos nuestro servicio: productServices.js, en este momento empezamos con la programacion orientada a objetos (POO)</li>
+                    <li>Empezamos a definir toda la logica a nivel transaccional que van a tener nuestros datos, aquí vamos a gestionar todo lo de los productos como crear, editar, etc, entonces vamos a implementar esas funcionalidades.</li>
+                    <li>Creamos las funcionalidades:
+                        <p>
+                            <img src="https://i.pinimg.com/originals/c2/d4/bf/c2d4bf0bb5395da1c1af723cb9b490dc.jpg" alt="">
+                        </p>
+                        En este caso no vamos a conectar a una base de datos, esto se lo hará en otro curso, creamos los metodos delete, el metodo constructor y otro metodo generate, donde vamos a ultizar la data fake que habíamos usado anteriormente.
+                    </li>
+                    <li>
+                        Cortamos y pegamos la funcion donde utilizamos faker para generar productos falsos y llenamos los campos de los metodos:
+                        <p><img src="https://i.pinimg.com/originals/2c/fa/3a/2cfa3afee48f7d4a26b6dd44e6abafdb.jpg" alt=""></p>
+                    </li>
+                    <li>
+                        En el Router nos traemos el servicio con las siguientes lineas de codigo(vamos a requerir el servicio de productos, luego creamos la instancia de la clase y finalmente establecemos el route donde indicamos que nos traiga el array de productos que creamos en la clase ProductsService):
+                        <p><img src="https://i.pinimg.com/originals/1c/d9/a0/1cd9a0eadc91f45111c11453e0db333d.jpg" alt=""></p>
+                    </li>
+                    <li>
+                        creamos el atributo id (dentro de generate, dentro del this.products.push({})), y le decimos que cree un string muy largo de forma randomica (uuid()):
+                        <p class="code">id: faker.datatype.uuid(),</p>
+                        luego en el metodo findOne(), le agregamos el parametro id y manipulamos los array para que encuentre el item id y le de el valor de id.
+                        <p><img src="https://i.pinimg.com/originals/ac/8c/08/ac8c08600e16a9c7e5f429beccf847fc.jpg" alt=""></p>
+                    </li>
+                    <li>
+                        Ahora en el Routing vamos a cambiar la ruta que recibe el parametro id, eliminamos el codigo anterior y vamos a escribir este nuevo codigo, un poco más inteligente.
+                        <p><img src="https://i.pinimg.com/originals/86/a6/89/86a6891c3ba1ec45b74e3e81c082ff96.jpg" alt=""></p>
+                        <img src="https://i.pinimg.com/originals/4f/68/d1/4f68d12a27a1f8cd85b6a50d5c9c328e.jpg" alt="">
+                    </li>
+                    <li>
+                        finalmente podemos probar en el cliente nuestra aplicacion, vamos a ver que tiene un id y que el id si lo buscamos en el url va a encontrar el producto por su id, además, como esta vez utilizamos el constructor, los productos quedan guardados en memoria RAM
+                        <p><img src="https://i.pinimg.com/originals/7e/c6/48/7ec648706b671a843c93befe9ef76f8e.jpg" alt=""></p>
+                        <p><img src="https://i.pinimg.com/originals/d9/f2/4e/d9f24eb0126dfdda4973883558600564.jpg" alt=""></p>
+                    </li>
+                </ol>
+            </div>
+            <hr>
+            <div>
+                <h2>Create, Update & delete</h2>
+            <p>Vamos a crear, actualizar y eliminar utilizando la capa de servicios, con la ventaja que ya tenemos un tipo de persistencia, que es la persistencia en memoria. </p>
+            <h3>Create</h3>
+            <ol>
+                <li>
+                    ingresamos el parametro data y las instrucciones que necesita nuestro metodo create.
+                <p><img src="https://i.pinimg.com/originals/a0/15/b9/a015b993b95ff4e98a29d09f5e6bc7ae.jpg" alt=""></p>
+                </li>
+                <li>
+                    Vamos a nuestro post de productsRouting.js y lo reconfiguramos para que ejecute el metodo create, con la data que le enviamos y para que cree un id automaticamente.
+                    <p><img src="https://i.pinimg.com/originals/7f/f1/fa/7ff1fa6e557442b08789fc5d0b8b6207.jpg" alt=""></p>
+                </li>
+                <li>
+                    probamos que funcione llendonos a post y creando el producto, vamos a crear un producto que cuesta 500
+                    <p><img src="https://i.pinimg.com/originals/e0/19/d9/e019d913b8d2fc58879dabc417f82ad8.jpg" alt=""></p>
+                </li>
+                <li>
+                    verificamos que se halla creado viendo en la lista de productos, antes de eso le volvemos a hacer request/send para que se actualize la lista.
+                    <p><img src="https://i.pinimg.com/originals/70/5c/af/705cafca697bd7327f7cc16c9b005914.jpg" alt=""></p>
+                </li>
+                perfecto se guardo el producto en memoria, dentro del array de productos en el constructor.
+            </ol>
+            <h3>Update/Actualizar</h3>
+            <ol>
+                <li>
+                    ingresamos los parametros id, changes y las instrucciones que necesita nuestro metodo create.
+                    <p><img src="https://i.pinimg.com/originals/9c/fc/68/9cfc68a246a24c57383590b4d08d9801.jpg" alt=""></p>
+                </li>
+                <li>
+                    Luego en el routing configuramos para que utilice la capa de servicios:
+                    <p><img src="https://i.pinimg.com/originals/b5/b2/b6/b5b2b6197e01067f0b97925e308609b8.jpg" alt=""></p>
+                </li>
+                <li>
+                    Pero al hacer la prueba resulta que al actualizar el producto elimina el resto de la informacion, dejando solo la informacion que actualizamos:
+                    <p><img src="https://i.pinimg.com/originals/e7/93/79/e793793f316ad2296a6da43840e91d04.jpg" alt=""></p>
+                    <img src="https://i.pinimg.com/originals/8c/32/b0/8c32b053ffec4755ba30559a9320b633.jpg" alt="">
+                </li>
+                <li>
+                    Vamos a corregir esto, adicionando el siguiente codigo:
+                    <p><img src="https://i.pinimg.com/originals/36/fa/91/36fa91c86e20a7b88c6dc996dbc5a234.jpg" alt=""></p>
+                </li>
+                <li>
+                    volvemos a probar:
+                    <p><img src="https://i.pinimg.com/originals/94/d4/f6/94d4f66c36925dcfb7a1b2053ee4f63e.jpg" alt=""></p>
+                    <img src="https://i.pinimg.com/originals/65/29/00/652900c5d67f54352bd790f9224918bb.jpg" alt="">
+                </li>
+                Excelente!!! *0*
+            </ol>
+            <h3>Delete</h3>
+            <ol>
+                <li>
+                    Agrego la siguite linea de codigo:
+                    <p><img src="https://i.pinimg.com/originals/61/b0/75/61b075648690a356ba2e59c5abbd7b4f.jpg" alt=""></p>
+                </li>
+                <li>
+                    reconfiguramos en el routing para que utilice los servicios
+                    <p><img src="https://i.pinimg.com/originals/18/ee/51/18ee51001aaeec7a32ce359a936036ad.jpg" alt=""></p>
+                </li>
+                <li>
+                    probamos que el producto se elimine en el listado que tenemos: <br>
+                    verificamos existencia:
+                    <p><img src="https://i.pinimg.com/originals/51/e2/3b/51e23b455c3faf2ddeca3eb19600d277.jpg" alt=""></p>
+                    eliminamos el producto:
+                    <p><img src="https://i.pinimg.com/originals/c0/8b/e6/c08be62c4d60c9e752b3e730fd572652.jpg" alt=""></p>
+                </li>
+            </ol>
+            </div>
+            <hr>
+            <div>
+                <h2>Async, await y captura de errores</h2>
+                <p>Hasta ahora hemos corrido Node de forma syncrona, y es bueno pero esto en la web o en la coneccion con bases de Datos puede ser un problema debido al delay(demora) de coneccion. Entonces debemos saber como manejar asyncronismo en los servicios.</p>
+                <p>Vamos a añadir el async a todos los metodos, por el momento los vamos a agregar sin el await pero en el routing si vamos a usar el async y await de forma completa. lo vamos a dejar así para tenerlo preparado en el futuro.</p>
+                <img src="https://i.pinimg.com/originals/16/2d/24/162d2478286b0384d807dd3b616abbc8.jpg" alt="">
+                <img src="https://i.pinimg.com/originals/4f/99/3f/4f993f4e0f340ccc70467d915dca5340.jpg " alt="">
+                <p>Captura de errores:</p>
+                <img src="https://i.pinimg.com/originals/90/cd/2b/90cd2b7674385a72b12e06b263c51195.jpg" alt="">
+            </div>
+            <hr>
+            <div>
+              <h6>Spread</h6>
+              <p><strong>Sintáxis</strong>La sintaxis extendida o spread syntax permite a un elemento iterable tal como un arreglo o cadena ser expandido en lugares donde cero o más argumentos (para llamadas de  función) o elementos (para Array literales) son esperados, o a un objeto ser expandido en lugares donde cero o más pares de valores clave (para literales Tipo Objeto) son esperados.</p>
+              <a href="https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Operators/Spread_syntax">sintáxis Spread</a>
+            </div>
+            <hr>
+        </div>
+        <div>
+            <h2>Middlewares</h2>
+        <p>Middleware es software que permite uno o más tipos de comunicación o conectividad entre dos o más aplicaciones o componentes de aplicaciones en una red distribuida. Al facilitar la conexión de aplicaciones que no fueron diseñadas para conectarse entre sí, y al brindar funcionalidad para conectarlas de manera inteligente, el middleware agiliza el desarrollo de aplicaciones y acelera el tiempo de comercialización.</p>
+        <br>
+        <p>Estos estan en medio del request y el response, osea que cada vez que por ejemplo en routing en el momento del callback, recibimos un request y un response, esto quiere decir que casi todo lo que colocamos en ese callback, es un middleware</p>
+        <img src="https://i.pinimg.com/originals/1e/e2/04/1ee20449d90ed3f0fefec1ef5369847a.jpg" alt="">
+        <p>Pueden funcionar de forma secuencial, quiere decir que yo tengo varios middlewares y despues corra otro y hacer una cadena de middlewares, por ejemplo: el primer valide logica de autentificacion, en el segundo podria validar la data, en el tercero ahcer otra cosa</p>
+            <img src="https://i.pinimg.com/originals/4f/d7/af/4fd7afb20537b2640ab8d8b3a6d50f51.jpg" alt="">
+           <p> esto quiere decir que uno de estos middlewares puede bloquear la ejecucion de esta otra, por ejemplo si ese usuario en especifico no tuviera el permiso necesario para aceder a esa informacion:
+        </p><img src="https://i.pinimg.com/originals/24/0f/8e/240f8e889a7a540bc13fd311e15a9e91.jpg" alt="">
+        <p>Esta son la clase más común de middlewares, pero hay otro tipo de middlewares que se ejecutan de otras formas:</p>
+        <img style="width: 450px;" src="https://i.pinimg.com/originals/31/42/64/3142649784375871be900cae26b6a2bf.jpg" alt="">
+        <img style="width: 450px;" src="https://i.pinimg.com/originals/1c/38/06/1c3806567167e63b4ffa7b964e8cc408.jpg" alt="">
+        <p>Tenemos los siguientes casos de uso</p>
+        <img src="https://i.pinimg.com/originals/d6/47/58/d647589e86f13d32039879a5a2fda471.jpg" alt="">
+        <p>¿Que es un pipe? Las pipes también llamadas tuberías o filtros son funciones que se llaman en una vista (html) y que tienen por objetivo transformar un dato a mostrar para mejorar la experiencia del usuario.</p>
+        </div>
+        <hr>
+        <div>
+            <h3>Middleware for errors(httpErrors)</h3>
+            vamos a crear un middleware que actue de forma global, para que capture los errores y formatearlo de una manera adecuada para devolverlo a nuestro cliente
+            <h4>¿como haremos el middleware global para errores?</h4>
+            <ol>
+                <li>
+                    Vamos a crear un nueva carpeta y un nuevo archivo llamado midlewares y errorHandler.js
+                </li>
+                <li>
+                    Creamos la funcion con la que vamos a logear el error, Es importante acotar que en los parametros agregemos el err, y el next y al final ejecutemos la funcion next enviandole el err como parametro para que Node entienda que estamos ejecutando un middleware de tipo error.
+                    <img src="https://i.pinimg.com/originals/5a/92/6e/5a926e4513d527c705816036f3962536.jpg" alt="">
+                </li>
+                <li>
+                    Creamos otra funcion que va a crear y enviar el formato para que le enviemos el error a nuestro cliente:
+                    <img src="https://i.pinimg.com/originals/cc/69/7f/cc697f4895a9a14ef76eacc6f8b24710.jpg" alt="">
+                    <p>Recuerda que aún así no estes utilizando next, tiene que agregarlo como parametro para que Node entienda que estas trabajando con un Middleware de correccion de Errores</p>
+                </li>
+                <li>
+                    Vamos a importar nuestras funciones al index.js <br>
+                    <img src="https://i.pinimg.com/originals/cc/23/2d/cc232ded90b549a9c678bea13dc25d2d.jpg" alt="">
+                    <p>Los Middlewares del tipo error se deben crear despues de haber establecido el routing de nuestra aplicacion</p>
+                </li>
+                <li>
+                    <p>Le decimos a la aplicacion que use los middlewares, tenemos que tener mucha delicadeza con el orden en que llamamos a los middlewares, para que se ejecuten en el orden de cadena correcto, ya que en el orden que se ejecuten las lineas sera el orden en el que se ejecuten uno de tras del otro</p>
+                    <img src="https://i.pinimg.com/originals/9e/f0/ad/9ef0ad30e3564e5aeafacc76a245f400.jpg" alt="">
+                </li>
+                <li>
+                    <p>Finalmente debemos tambien capturar el error de una forma explicita desde el routing:</p>
+                    <p>Establecemos a next tambien como parametro de la funcion, utilizamos un try y catch para caprturar el error y finalmente declaramos la funcion next(error) para que los middlewares ejecuten</p>
+                    <img src="https://i.pinimg.com/originals/e3/55/33/e35533de2b500f48da9c18527e089af1.jpg" alt="">
+                </li>
+                lo hemos hecho bien, con excepcion que estamos incurriendo en una mala practica al enviar el error 500, cuando deberiamos utilizar otra clase de status code D: :0
+            </ol>
+        </div>
+        <hr>
+        <div>
+            <h3>Manejo de errores con Boom</h3>
+            <p>Nos va a permitir hacer el manejo o manipulacion de errores pero respetando el status code</p>
+            <p>¿Como implementarla?</p>
+            <ol>
+                <li>
+                    <p>Ejecutamos el comando npm para instalar Boom</p>
+                    <p class="comando">npm i @hapi/boom</p>
+                </li>
+                <li>
+                    <p>Como lo vamos a necesitar en nuestro archivo de servicio, vamos a requerir la dependencia en el archivo productService.js</p>
+                    <p class="code">const boom = require('@hapi/boom');</p>
+                </li>
+                <li>
+                    <p>
+                        cambiamos nuestra forma de manipular los errores dentro del codigo.
+                    </p>
+                    <img src="https://i.pinimg.com/originals/e7/f6/1d/e7f61d6b97414023b9daa1490b0eabdb.jpg" alt="">
+                </li>
+                <li>
+                    <p>Tenemos que crear un middleware ya que boom maneja los errores de una forma diferente, para esto nos vamos al archivo de middleware errors, aprovechando que cuando el sistema genera un error con boom automaticamente le agrega una propiedad llamada isBoom</p>
+                    <img src="https://i.pinimg.com/originals/3f/73/98/3f7398ff44b57a0941b608806eae9fb3.jpg" alt="">
+                    <p>si no es un error del tipo boom ejecutara el siguiente middleware</p>
+                </li>
+                <li>
+                    vamos a importar la libreria tambien en el routing para ejecutarla
+                    <p class="code">const { logErrors, erroHandler, boomErrorHandler } = require('...DIreccion/archivoMiddlewareforErrors');</p>
+                </li>
+                <li>
+                    <p>Ahora lo empezamos a usar dentro de la cadena de middlewares:</p>
+                    <img src="https://i.pinimg.com/originals/9f/5a/98/9f5a986de2663cef0f4a9079f854c3e3.jpg" alt="">
+                </li>
+                <li>
+                   <p> vamos a probar enviando la peticion de un producto que no existe:</p>
+                    <img src="https://i.pinimg.com/originals/73/21/df/7321df2d3849d1094d25b2cad454fc44.jpg" alt="">
+                </li>
+                <li>
+                    <p>Podemos crear un nuevo atributo de producto para bloquear algunos productos y otros no de forma random y bloquear algunos productos y otros no</p>
+                    <img src="https://i.pinimg.com/originals/62/ba/3f/62ba3f68bdb6bd6020047e2b76e2d3cf.jpg" alt="">
+                </li>
+                <li>
+                    <p>Agregando un error de logica de negocio, tipo conflicto</p>
+                    <img src="https://i.pinimg.com/originals/ee/ed/e3/eeede3dd44fee5de5e6fc5c7a7a3541e.jpg" alt="">
+                </li>
+                <li>
+                   <p>Excelente ahora podemos consultar por un producto que si exista pero que se encuentre bloqueado</p>
+                   <img src="https://i.pinimg.com/originals/30/c9/84/30c9845efbda869115f6eed64aaa6d6f.jpg" alt="">
+                </li>
+            </ol>
+        </div>
+        <hr>
+        <h6>Destructuring</h6>
+        <p>es destructurando el objeto o sacando solo que necesitamos de el, ya que lo anterior nos retorna un objeto con {} de decimos que solo nos traiga la propiedad error del objeto.</p>
+        <p>es una forma de acceder al valor o atributo de un objeto, por ejemplo podemos eso decir:</p>
+        <p>que tenemos un objeto con el siguiente valor: { value: {}, error: '"username" is required' }</p>
+        <p class="code">const {error} = schema.validate(data);</p>
+        <p>Es lo mismo que decir:</p>
+        <p class="code">const error = schema.validate(data).error;</p>
+        <hr>
+        <div>
+            <h2>Validación de Datos</h2>
+            <p>Middlewares para validar los datos, validar los datos que me estan enviando desde el cliente,si yo tengo una bibliotecta ya sea angular o react, ellos nos envian la información a la API, pero nosotros como Backend deberiamos decirle que cumple con la integridad de datos requerida para poder insertar eso a una base de datos.</p>
+            <p>Vamos a ver como podemos hacer esta validacion de datos, para esto vamos a utilizar una libreria llamada joi</p>
+            <ol>
+                <li>
+                    <p>Empezamos por instalar la libreria <a href="https://joi.dev/">Joi</a></p>
+                    <p class="comando">npm i joi</p>
+                </li>
+                <li>
+                    creamos la carpeta de schemas.
+                    <p>Podemos llamarlos schemas o tambien podemos llamarlo Dtos</p>
+                </li>
+                <li>
+                    creamos el archivo productSchemas.js
+                </li>
+                <li>
+                    importamos la libreria con el require
+                </li>
+                <li>
+                    <p>Haremos un schema especidfico para cada campo, eso nos va a ayudar a reutilizar mucho mejor el codigo y para poder reutilizar ese codigo, ademas que simplifica la creacion.</p>
+                    <p>Debemos empezar por el tipo de campo que es por ejemplo:(string()) y luego la validacion:(uuid())</p>
+                    <img src="https://i.pinimg.com/originals/01/94/9c/01949c59b7ae4890183aecd4b77b928f.jpg" alt="">
+                </li>
+                <li>
+                  <p> escribimos nuestro codigo para los metodos y le indicamos cuales son requeridos y cuales no....</p>
+                  <img src="https://i.pinimg.com/originals/e2/f3/1e/e2f31ef91bc7f592d9956b1a8c19c9f3.jpg" alt="">
+                </li>
+                <li>
+                    <p>Vamos a crear un middleware para realizar estas validaciones, empezaremos por crear en la carpeta de middlewares el archivo validatorHandler.js</p>
+                </li>
+                <li>
+                    esto ya seria un middleware normal que solo tendria los parametros: req, res, next u otros.
+                    <p>vamos a configurar un middleware que sea dinamico, por eso vamos a recibir el schema y la propiedad, luego vamos a crear un closure o dicho de otra forma vamos a retornar una funcion:</p>
+                    <img src="https://i.pinimg.com/originals/c3/3f/0a/c33f0ad4a698e83b00149b243c182e0a.jpg" alt="">
+                </li>
+            </ol>
+        </div>
+        <div>
+           <p> ya hemos creado toda la esturctura de nuestro middleware de validacion de datos con joi, ahora vamos a aprender a aplicarlo y ver como se Utiliza:</p>
+           <p>Vamos a ver como se utiliza</p>
+           <ol>
+               <li>
+                   vamos a las rutas donde estan los metodos de request y response. Abrimos productRouter.js
+               </li>
+               <li>
+               <p> importamos a validatorHandler y a productSchemas</p>
+               <img src="https://i.pinimg.com/originals/77/76/a3/7776a3dd5cb1d48848cd1e6e98daa37b.jpg" alt="">
+               </li>
+               <li>
+                 <p> Antes de ejecutar el middleware asyncrono con el que conectamos al servicio, vamos a ejecutar los middlewares de validacion de datos, si todo sale bien correra el next y ejecutara el middleware de servicio o routing</p>
+                 <p>Dentro de los parametros como habiamos puesto en el validatorhandler le indicamos que schema vamos a usar en dichos flujos y donde se encuentra la informacion(la propiedad)</p>
+                 <img src="https://i.pinimg.com/originals/8f/77/85/8f7785cc044dd4c3f1f33f4bcf008482.jpg" alt="">
+                 <p>¿que tal si tengo más propiedades y me toca agregarla a las dos? simplemente lo concatenamos o ejecutamos el siguiente middleware</p>
+                 <img src="https://i.pinimg.com/originals/65/8f/2e/658f2e5c1038061c1c6655568ad67d82.jpg" alt="">
+               </li>
+               <li>
+                 <p>  Podriamos probar nuestra validacion y vamos a ver que si enviamos a crear un producto con un nombre de más de un caracter nos muestra un error, eso fue por que nosotros lo programamos para que acepte solo nombres alfa-numericos </p>
+                 <img src="https://i.pinimg.com/originals/8c/d9/bd/8cd9bd88c89d4d8fa3a05916e44de576.jpg" alt="">
+               </li>
+               <li>
+                   <p>Le vamos a eliminar la validacion de caracter alfa numerico y vamos a crear una nueva constante para tambien validar imagenes en productSchema</p>
+                   <img src="https://i.pinimg.com/originals/ef/e0/ba/efe0ba73daa504728d4cb884a0e4cc47.jpg" alt="">
+               </li>
+               <li>
+                   <p>
+                       Vamos a poner en el metodo de crear productos que la imagen sea requerida pero no para actualizar los productos. En productSchema
+                   </p>
+                   <img src="https://i.pinimg.com/originals/f3/56/1a/f3561a3f42a2ae3e124b57b317b91687.jpg" alt="">
+               </li>
+               <li>
+                   <p>El otro problema es que cuando hay más de un error, nos imprime un solo error de validacion, esto es molesto y frustrante para nuestris clientes, entonces vamos a configurar a Joi para que impriman todos los errores de validacion de golpe y el cliente sepa todo lo que tiene que corregir antes de volver a enviar una peticion</p>
+                   <p>Lo haremos adicionando al validate un objeto que le diga al atributo abortEarly que no aborte cuanto antes, que aborte despues de verificar todos los datos</p>
+                   <img src="https://i.pinimg.com/originals/93/b2/9a/93b29a7b56c16651f37c1377f4a9cf5f.jpg" alt="">
+               </li>
+               <li>
+                   <p>Y listo ya valida todo en conjunto y de forma correcta</p>
+                   <img src="https://i.pinimg.com/originals/85/14/62/851462735c1352cdd13e7b82d3bedc62.jpg" alt="">
+               </li>
+           </ol>
+        </div>
+        <hr>
+        <div>
+            <h3>Middlewares populares en Express.js</h3>
+            <p>A continuación te compartiré una lista de los middlewares más populares en Express.</p>
+
+                <h5>CORS</h5>
+               <p> Middleware para habilitar CORS (Cross-origin resource sharing) en nuestras rutas o aplicación. <a href="http://expressjs.com/en/resources/middleware/cors.html"> http://expressjs.com/en/resources/middleware/cors.html</a></p>
+
+                <h5>Morgan</h5>
+                <p> Un logger de solicitudes HTTP para Node.js. <a href="http://expressjs.com/en/resources/middleware/morgan.html"> http://expressjs.com/en/resources/middleware/morgan.html</a></p>
+
+                <h5>Helmet</h5>
+                <p> Helmet nos ayuda a proteger nuestras aplicaciones Express configurando varios encabezados HTTP. ¡No es a prueba de balas de plata, pero puede ayudar! <a href="https://github.com/helmetjs/helmet"> https://github.com/helmetjs/helmet</a></p>
+
+                <h5>Express Debug</h5>
+                <p> Nos permite hacer debugging de nuestras aplicaciones en Express mediante el uso de un toolbar en la pagina cuando las estamos desarrollando.<a href="https://github.com/devoidfury/express-debug"> https://github.com/devoidfury/express-debug</a></p>
+
+                <h5>Express Slash</h5>
+                <p> Este middleware nos permite evitar preocuparnos por escribir las rutas con o sin slash al final de ellas.<a href="https://github.com/ericf/express-slash"> https://github.com/ericf/express-slash</a></p>
+
+                <h5>Passport</h5>
+                <p> Passport es un middleware que nos permite establecer diferentes estrategias de autenticación a nuestras aplicaciones. <a href="https://github.com/jaredhanson/passport"> https://github.com/jaredhanson/passport</a></p>
+
+                 <p>Puedes encontrar más middlewares populares en el siguiente enlace: <a href="http://expressjs.com/en/resources/middleware.html"> http://expressjs.com/en/resources/middleware.html</a></p>
+        </div>
+        <hr>
+        <div>
+            <h2>Produccion</h2>
+            <p>Estamos a punto de llevar nuestro sitio a produccion, pero hay que tomar en cuenta unas cuantas consideraciones.... <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS">Como el CORS=>Cross-Origin Resource Sharing</a></p>
+            <img style="width: 400px;" src="https://i.pinimg.com/originals/dd/78/9c/dd789c17aa2fc741abf4eb0dba7b98ed.jpg" alt="">
+            <ul>
+                <li>
+                    <strong>  Evaluar los CORS:</strong>
+                    <p>a quienes les damos acceso para atender solicitudes</p>
+                </li>
+                <li>
+                    <strong>  Que nuestra API este sobre un servidor que sea https </strong>
+                    <p>por que esta cifrado, en cambio en http cualquiera podria tener acceso a nuestra informacion de una manera sencilla</p>
+                </li>
+                <li>
+                    <strong>  Tener procesos de BUILD</strong>
+                    <p>esto tiene más que ver con cosas que tienen que procesar una informacion, por ejemplo typescript que tiene que pasarse a javascript o sass... si tienes algun proceso de building deberias trabajarlo y verificar que funcione bien antes de ponerlo a trabajar en produccion</p>
+                </li>
+                <li>
+                    <strong> Remover Logs</strong>
+                    <p>No es bueno tener logs, no es bueno tener logs en produccion, incluso esto aveces puede hacer demorar la aplicacion, se puede utilizar sarcentry o datalog para capturar todo esto en produccion</p>
+                </li>
+                <li>
+                    <strong>  Seguridad</strong>
+                    <p>Es importantisimo trabajar la seguridad desde el principio, Helmet es una colleccion de middlewares que ya ponen algunas capas de seguridad a tu aplicacion de Node</p>
+                </li>
+                <li>
+                  <strong> Testing: Pruebas Unitarias</strong>
+                    <p>tenemos que hacer pruebas unitarias o pruebas de integracion antes de subir nuestra aplicacion</p>
+                </li>
+            </ul>
+            <h3>CORS</h3>
+            <p>hasta ahora hemos probado haciendo peticiones desde el mismo origen, y por eso no habia problema con recibir las peticiones hechas, pero que tal si la peticion viene desde un origen diferente? el servidor automaticamente las va a rechazar</p>
+            <img style="width: 400px;" src="https://i.pinimg.com/originals/2e/cc/96/2ecc962c342d7863c877326ce961edb9.jpg" alt="">
+            <p>Pero que tal si necesitamos empezar a usar subdominios, otros dominios e incluso applicaciones mobile => android o !os? son applicaciones que tienen un origen diferente</p>
+            <img style="width: 400px;" src="https://i.pinimg.com/originals/d1/85/63/d185634166dd7bc1c5eb81e986abd968.jpg" alt="">
+            <p>Por defecto nuestro Backend rechazara estas peticiones de origenes diferentes</p>
+            <h4>entonces... ¿como configuramos nuestros puertos u origenes de acceso para los dominios?</h4>
+            <ol>
+                <li>
+                    <img style="width: 350px;" src="https://i.pinimg.com/originals/2a/d2/75/2ad275c1a0714cf30f9f5a585d2cb1b0.jpg" alt="">
+                    <p>Sí, hay un modulo llamado CORS para dar esta solucion, y lo instalamos con el comando:</p>
+                    <p class="comando">npm i cors</p>
+                    <p>Esta libreria funciona como un middleware</p>
+                </li>
+                <li>
+                    <p>Lo requerimos en el index donde esta el routing y vamos a configurar, const cors = require('cors');</p>
+                </li>
+                <li>
+                    y luego lo ejecutamos:
+                    <p class="code">app.use(cors());</p>
+                    <p>Pero si lo dejamos así, la applicacion aceptaria cualquier origen</p>
+                </li>
+                <li>
+                  <p>  entonces creamos un array como nuestra whitelist con nuestros dominios y origenes permitidos, además una constante llamado options con un objeto que tenga un atributo origin que ejecute una funcion flecha o arrow function que ejecute una validacion que vea si el origen esta incluido en el whitelist, y que en caso de no serlo lanze un error </p>
+                  <img src="https://i.pinimg.com/originals/89/21/65/8921651d20b5f1bb83cd383aec3be121.jpg" alt="">
+                <p>  no olvidemos de enviar como parametro al atributo options</p>
+                </li>
+                <li>
+                    aunque siento que no me quedo muy claro eso seria todo
+                </li>
+            </ol>
+            </div>
+            <hr>
+            <div>
+                <h2>Deployment</h2>
+                <p>Vamos a desplegar nuestro sitioweb dentro de los servidores de <strong> <a href="https://www.heroku.com/">Heroku</a></strong></p>
+                <ol>
+                    <li>
+                        instalamos Heroku
+                        <p>Si estamos en linux nos pueden servir y nos es recomendado los siguientes comandos:</p>
+                        <p class="comando"> curl https://cli-assets.heroku.com/install.sh | sh</p>
+                        <p class="comando">heroku login</p>
+                        <p class="comando">heroku create</p>
+                        <p class="comando">git remote -v</p>
+                        <br>
+                        <p>Si no tambien podemos ingresar a la pagina oficial, registrarnos o logiarnos e ir a la documentacion oficial para instalar el asistenete de comandos</p>
+                    </li>
+                    <li>
+                        ya habiendo ingresado a <a href="https://www.heroku.com/">Heroku</a>,
+                        le damos clic a documentation y luego a ger start.
+                        <p>FInalmente le das click o copias el comando que te dan, este caso hare click en el boton de windows 64-bit installer</p>
+                        <p>Si estas en ubuntu puedes instalarlo con el siguiente comando</p>
+                        <p class="comando">sudo snap install --classic heroku</p>
+                        <p>Si estas en macOS puedes instalarlo con el siguiente comando</p>
+                        <p class="comando">brew tap heroku/brew && brew install heroku</p>
+                    </li>
+                    <li>
+                        luego de haber instalado heroku en nuestros sistemas, y hecho loggin(aunque no importa por que te va a pedir que des click en un link para loggearte autoamticamente) vamos a la carpeta de la aplicacion y ejecutamos el siguiente comando:
+                        <p class="comando">heroku create</p>
+                        <img src="https://i.pinimg.com/originals/d7/05/81/d70581295fe15a7eeb23b20723bce614.jpg" alt="">
+                    </li>
+                    <li>
+                        <p>Despues de haber hecho esto, Heroku va a crear un repositorio de Git, lo puedes verificar ejecutando el comando:</p>
+                        <p class="comando">git remote -v</p>
+                        <p>Con esto vamos a poder ir haciendo commits y automaticamente va a haber un deployment por que como viste ahora hay dos origenes, tambien nos da una url de nuestro proyecto</p>
+                        <p><a href="https://frozen-eyrie-22132.herokuapp.com/">https://frozen-eyrie-22132.herokuapp.com/</a></p>
+                       <p> y si vas a tu dhasboard de heroku podras ver tu app</p>
+                    </li>
+                    <li>
+                        <p>como dice en este <a href="https://devcenter.heroku.com/articles/getting-started-with-nodejs">link</a> En nuestro package.json debemos especificar que version de node queremos correr en neustra aplicacion, agregando la siguiente linea de codigo</p>
+                    <img src="https://i.pinimg.com/originals/2f/e8/b7/2fe8b75d8c29c0a546fd5014c11941ae.jpg" alt="">
+                    </li>
+                    <li>
+                        <p>Podemos correr en un entorno de heroku local desde nuestra compu antes de problarlo de forma remota en el servidor con el comando:</p>
+                        <p class="comando">heroku local web</p>
+                    </li>
+                    <li>
+                        <p>hacemos cambios en los CORS de nuestro sitio y en el puerto para que se asigne un puerto de forma automamtica o que escoga un puerto especifico 3000 y a la vez para que acepte las peticiones del puerto local</p>
+                        <img src="https://i.pinimg.com/originals/47/b5/c3/47b5c3e22892168a1499a552ad446cfe.jpg" alt="">
+                    </li>
+                    <li>
+                       <p>dentro de los archivos de nuestro proyecto creamos el archivo procfile, este archivo no va a llenar ningun punto ni formato por que ya lo coge por defecto, en el cual le vamos a indicar como queremos que heroku lance el proyecto, seria lo mismo de especificarle el comando que debemos darle para que corrra o el script</p>
+                       <p>en este caso le especificaremos que corra el script npm run start, que en nuestro pakage.json es node index.js</p>
+                       <p>con este comando correremos nuestra aplicacion directamente a produccion</p>
+                       <img src="https://i.pinimg.com/originals/5a/de/f5/5adef51982719551122f9692d327eedf.jpg" alt="">
+                    </li>
+                    <li>
+                    <p>   Llego el momento esperado, ya podemos hacer nuestro deploy y lo haremos haciendo un push a nuestro repositorio de heroku, así automaticamente se hara el deployment debido</p>
+                    <p class="comando">git push heroku main</p>
+                    <img src="https://i.pinimg.com/originals/7a/65/6b/7a656b5a3e76529000fddb184e396e41.jpg" alt="">
+                    </li>
+                    <li>
+                       <p> bien, al correr exitosamente el comando anterior, ya esta hecho el deployment, y te envia un link con el dominio de tu aplicacion, si gustas puedes despues ir a settings de tu app en el dashboard de heroku y prosonalizar tu propio dominio.</p>
+                    <p>En este caso nuestro dominio es: <a href="https://vast-temple-37338.herokuapp.com/">https://vast-temple-37338.herokuapp.com/</a>
+                    entramos y guala!!! tenemos nuestra aplicacion corriendo exitosamente</p>
+                    <img src="https://i.pinimg.com/originals/20/ef/f7/20eff7b928a4c70a34cfb5388daa0c11.jpg" alt="">
+                    </li>
+                </ol>
+            </div>
+    </section>
+    </main>
+</body>
+</html>
